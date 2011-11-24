@@ -63,6 +63,36 @@ ResizeWindow(moveKey)
 
 	;Get inital mouse position
 	MouseGetPos, mX, mY
+
+	;Get inital Window position
+	WinGetPos, winX, winY, winL, winH, ahk_id %winID%
+
+	;Find witch quadrant the mouse is in, relitive to the window
+	if (mX >= (winX + winL/2))
+	{
+		;mouse is on the right of the window
+		modRX := 1
+		modWX := 0
+	}
+	else
+	{
+		;mouse is on the left side
+		modRX := -1
+		modWX := 1
+	}
+	
+	if (mY >= (winY + winH/2))
+	{
+		;mouse is on the bottom
+		modRY := 1
+		modWY := 0
+	}
+	else
+	{
+		;mouse is on the top side
+		modRY := -1
+		modWY := 1
+	}
 	
 	StartDraging(winID)
 	
@@ -77,14 +107,25 @@ ResizeWindow(moveKey)
 		    break
         }
 
-		WinGetPos, winX, winY, winH, winL, ahk_id %winID%
-        MouseGetPos, newX, newY
-        
-		WinMove, ahk_id %winID%,,,,winH - (mX - newX), winL - (mY - newY)
+		WinGetPos, winX, winY, winL, winH, ahk_id %winID%
+        MouseGetPos, nmX, nmY
+    	
+		;Calculate how much the mouse has moved
+		deltaX := mX - nmX
+		deltaY := mY - nmY
+		
+		;Calulate new window location
+		newX := winX - modWX*deltaX
+		newY := winY - modWY*deltaY
+		newH := winH - modRY*deltaY
+		newL := winL - modRX*deltaX
+		
+		
+		WinMove, ahk_id %winID%,,newX,newY,newL,newH
 		
 		;Save new mouse location
-		mX := newX
-		mY := newY
+		mX := nmX
+		mY := nmY
 
 		ShowWindowSize(winID)
 
