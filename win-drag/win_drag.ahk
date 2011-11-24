@@ -22,12 +22,15 @@ MoveWindow(moveKey)
 	;Get inital mouse position
 	MouseGetPos, mX, mY
 	
+	StartDraging(winID)
+	
 	;Loop until mouse button is released
     Loop
     {
         GetKeystate, pressed, %moveKey%, P
 		if pressed = U
         {
+			StopDraging(winID)
 			ToolTip,,,, TOOLTIPNUM
 		    break
         }
@@ -61,6 +64,8 @@ ResizeWindow(moveKey)
 	;Get inital mouse position
 	MouseGetPos, mX, mY
 	
+	StartDraging(winID)
+	
 	;Loop until Mouse button is released
     Loop
     {
@@ -68,6 +73,7 @@ ResizeWindow(moveKey)
 		if pressed = U
         {
 			ToolTip,,,, TOOLTIPNUM
+			StopDraging(winID)
 		    break
         }
 
@@ -86,6 +92,20 @@ ResizeWindow(moveKey)
     }
 	
 	return
+}
+
+; Call when working with window
+StartDraging(winID)
+{
+	;set window transparent
+	WinSet, Transparent, 220, ahk_id %winID%
+}
+
+; Call when done with window
+StopDraging(winID)
+{
+	;Set window to full opaque
+	WinSet, Transparent, 255, ahk_id %winID%
 }
 
 ;Show where the window is currently
