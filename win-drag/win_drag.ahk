@@ -10,6 +10,12 @@ CoordMode, Mouse, Screen
 ; Windows+Right mouse drag to resize window
 #RButton:: ResizeWindow("RButton")
 
+; Windows+Up arrow to Maximize
+#Up::MaxToggle()
+
+; Windows+Down arrow to Minimize
+#Down::RestoreMin()
+
 ;Call to move window under the mouse until 'move_key' is released
 MoveWindow(moveKey)
 {
@@ -169,4 +175,26 @@ ShowWindowSize(winID)
 	;Place ToolTip in center of window
 	ToolTip, `(%w%x%h%`), x + w/2, y + h/2, TOOLTIPNUM
 
+}
+
+;Toggle active window's maximize state
+MaxToggle(){
+	WinGet isMax, MinMax, A
+	if (isMax == 1){
+		WinRestore, A
+	}
+	else{
+		WinMaximize, A
+	}
+}
+
+;Restore active window if maximized, minimized if not maximized
+RestoreMin(){
+	WinGet isMax, MinMax, A
+	if (isMax == 1){
+		WinRestore, A
+	}
+	else{
+		WinMinimize, A
+	}
 }
