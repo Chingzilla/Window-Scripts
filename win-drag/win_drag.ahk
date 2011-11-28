@@ -4,10 +4,10 @@ TOOLTIPNUM := 15
 CoordMode, ToolTip, Screen
 CoordMode, Mouse, Screen
 
-; Create Win-RightClick window draging
+; Windows+Left mouse drag to move window
 #LButton:: MoveWindow("LButton")
 
-; Create Win-RightClick to resize window
+; Windows+Right mouse drag to resize window
 #RButton:: ResizeWindow("RButton")
 
 ;Call to move window under the mouse until 'move_key' is released
